@@ -112,10 +112,7 @@ protected:
   using size_type = smallest_size_t<N>;
 
 private:
-  // If value_type is const, then const std::array of non-const elements:
-  using array_based_storage =
-      std::conditional_t<!std::is_const_v<T>, std::array<T, N>,
-                         const std::array<std::remove_const_t<T>, N>>;
+  using array_based_storage = std::array<std::remove_const_t<T>, N>;
   alignas(alignof(T)) array_based_storage storage_data_{};
   size_type storage_size_ = 0;
 
@@ -161,9 +158,7 @@ protected:
   using size_type = smallest_size_t<N>;
 
 private:
-  using byte_based_storage = std::conditional_t<
-      !std::is_const_v<T>, raw_byte_based_storage<T, N>,
-      const raw_byte_based_storage<std::remove_const_t<T>, N>>;
+  using byte_based_storage = raw_byte_based_storage<std::remove_const_t<T>, N>;
   byte_based_storage storage_data_{}; // BUGBUG: test SIMD types
   size_type storage_size_ = 0;
 
