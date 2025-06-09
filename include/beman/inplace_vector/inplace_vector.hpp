@@ -123,7 +123,7 @@ protected:
   constexpr const T *storage_data() const noexcept {
     return storage_data_.data();
   }
-  constexpr T *storage_data() noexcept { return storage_data_.data(); }
+  constexpr auto storage_data() noexcept { return storage_data_.data(); }
   constexpr size_type storage_size() const noexcept { return storage_size_; }
   constexpr void unsafe_set_size(size_t new_size) noexcept {
     IV_EXPECT(size_type(new_size) <= N && "new_size out-of-bounds [0, N]");
@@ -171,7 +171,9 @@ protected:
   constexpr const T *storage_data() const noexcept {
     return storage_data_.storage_data(0);
   }
-  constexpr T *storage_data() noexcept { return storage_data_.storage_data(0); }
+  constexpr auto storage_data() noexcept {
+    return storage_data_.storage_data(0);
+  }
   constexpr size_type storage_size() const noexcept { return storage_size_; }
   constexpr void unsafe_set_size(size_t new_size) noexcept {
     IV_EXPECT(size_type(new_size) <= N && "new_size out-of-bounds [0, N)");
@@ -323,7 +325,7 @@ public:
     requires(std::constructible_from<T, Args...>)
   {
     IV_EXPECT(size() < capacity() && "inplace_vector out-of-memory");
-    std::construct_at(end(), std::forward<Args>(args)...);
+    std::construct_at(storage_data() + size(), std::forward<Args>(args)...);
     unsafe_set_size(size() + size_type(1));
     return this->back();
   }
