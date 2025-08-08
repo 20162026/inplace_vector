@@ -47,7 +47,11 @@ inline constexpr from_range_t from_range;
 // Smallest unsigned integer that can represent values in [0, N].
 template <size_t N>
 using smallest_size_t
-= std::conditional_t<(N < std::numeric_limits<uint8_t>::max()),  uint8_t,
+// = std::conditional_t<(N < std::numeric_limits<uint8_t>::max()),  uint_fast8_t,
+//     std::conditional_t<(N < std::numeric_limits<uint16_t>::max()), uint_fast16_t,
+//     std::conditional_t<(N < std::numeric_limits<uint32_t>::max()), uint_fast32_t,
+//     std::conditional_t<(N < std::numeric_limits<uint64_t>::max()), uint_fast64_t,
+  = std::conditional_t<(N < std::numeric_limits<uint8_t>::max()),  uint8_t,
     std::conditional_t<(N < std::numeric_limits<uint16_t>::max()), uint16_t,
     std::conditional_t<(N < std::numeric_limits<uint32_t>::max()), uint32_t,
     std::conditional_t<(N < std::numeric_limits<uint64_t>::max()), uint64_t,

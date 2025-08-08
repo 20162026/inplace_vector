@@ -33,6 +33,12 @@ option(
     OFF
 )
 
+option(
+    BEMAN_INPLACE_VECTOR_BUILD_BENCHMARKS
+    "Build benchmarks for beman.inplace_vector. Default: OFF. Values: { ON, OFF }."
+    OFF
+)
+
 configure_file(
     "${PROJECT_SOURCE_DIR}/include/beman/inplace_vector/config.hpp.in"
     "${PROJECT_BINARY_DIR}/include/beman/inplace_vector/config.hpp"
@@ -111,6 +117,24 @@ if(BEMAN_INPLACE_VECTOR_BUILD_TESTS)
     endblock()
 
     add_subdirectory(tests/beman/inplace_vector)
+endif()
+
+if(BEMAN_INPLACE_VECTOR_BUILD_BENCHMARKS)
+    # Fetch Google Benchmark
+    FetchContent_Declare(
+        benchmark
+        GIT_REPOSITORY https://github.com/google/benchmark.git
+        GIT_TAG v1.9.4
+        EXCLUDE_FROM_ALL
+    )
+
+    set(BENCHMARK_ENABLE_TESTING OFF CACHE BOOL "" FORCE)
+    set(BENCHMARK_ENABLE_GTEST_TESTS OFF CACHE BOOL "" FORCE)
+    set(BENCHMARK_ENABLE_INSTALL OFF CACHE BOOL "" FORCE)
+
+    FetchContent_MakeAvailable(benchmark)
+
+    add_subdirectory(benchmarks)
 endif()
 
 if(BEMAN_INPLACE_VECTOR_BUILD_EXAMPLES)
